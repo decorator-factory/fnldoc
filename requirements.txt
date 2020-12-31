@@ -1,3 +1,0 @@
-context-manager-patma==0.0.1
--e git+git@github.com:decorator-factory/python-fnl.git@b3a10e1080002b34e82ab285e5414e88688a88d5#egg=fnl
-lark==0.11.1
