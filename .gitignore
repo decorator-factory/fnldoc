@@ -132,3 +132,7 @@ dmypy.json
 
 .vscode/
 .idea/
+
+# FNL Docs
+input/
+output/

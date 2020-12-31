@@ -1,0 +1,13 @@
+{
+    "input_directory": "input",
+    "toc": {
+        "Thing": "thing.fnl",
+        "Aaa": {
+            "stuff": "aaa/stuff.fnl",
+            "x": "aaa/x.fnl"
+        }
+    },
+    "output_directory": "output",
+    "template_directory": "template",
+    "extensions": []
+}
