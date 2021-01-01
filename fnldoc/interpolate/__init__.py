@@ -20,3 +20,9 @@ def interpolate():
     def _interpolate(string: fnl.e.String):
         return fnl.e.InlineConcat(tuple(_perform_interpolation(string.value)))
     yield ("(λ str . inline)", _interpolate)
+
+@fnl.definitions.fn(__extension__, "$p")
+def interpolate_para():
+    def _interpolate_para(string: fnl.e.String):
+        return fnl.e.BlockTag("p", "", tuple(_perform_interpolation(string.value)))
+    yield ("(λ str . block)", _interpolate_para)
