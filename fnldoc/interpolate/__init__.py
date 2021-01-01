@@ -11,7 +11,7 @@ def _perform_interpolation(source: str):
         if start > last_pos + 1:
             yield fnl.e.String(source[last_pos + 1:start])
         yield fnl.parse("(" + match[1] + ")")
-        last_pos = start + len(match[0])
+        last_pos = start + len(match[0]) - 1
     yield fnl.e.String(source[last_pos + 1:])
 
 
