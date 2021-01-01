@@ -13,6 +13,5 @@
         }
     },
     "output_directory": "output",
-    "template_directory": "template",
     "extensions": []
 }

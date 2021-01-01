@@ -38,7 +38,10 @@ def build(config_path: str):
     with open(config_path) as config_file:
         config = json.load(config_file)
 
+    if "template_directory" in config:
     template_directory = Path(config["template_directory"])
+    else:
+        template_directory = Path(__file__).parent/"template"
     input_directory = Path(config["input_directory"])
     output_directory = Path(config["output_directory"])
     shutil.copytree(template_directory, output_directory, dirs_exist_ok=True)
