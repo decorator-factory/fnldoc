@@ -1,7 +1,8 @@
 import asyncio
+import importlib
 from textwrap import dedent
 from traceback import print_exc
-from typing import Callable, Dict, TypeVar, Union
+from typing import Dict, List, Tuple, Union
 import fnl
 from pathlib import Path
 import json
@@ -9,29 +10,43 @@ import sys
 import watchgod
 import shutil
 from aiohttp import web
+from functools import reduce
 
 
 Toc = Dict[str, Union["Toc", str]]
 
 
-def foo(input_directory: Path, src: Union[str, Toc]):
+def foo(input_directory: Path, src: Union[str, Toc], extensions: Dict[str, fnl.e.Entity]):
     if isinstance(src, str):
         path = input_directory / Path(src)
         source = path.read_text()
-        html = fnl.html(source)
+        html = fnl.html(source, extensions)
         return html
     else:
-        result = {}
-        for name, subtoc in src.items():
-            result[name] = foo(input_directory, subtoc)
-        return result
+        return {
+            name: foo(input_directory, subtoc, extensions)
+            for name, subtoc in src.items()
+        }
 
 
 Node = Dict[str, Union[str, "Node"]]
 
 
-def render_toc(input_directory: Path, src: Toc) -> Node:
-    return foo(input_directory, src)  # type: ignore
+def render_toc(input_directory: Path, src: Toc, extensions: Dict[str, fnl.e.Entity]) -> Node:
+    return foo(input_directory, src, extensions)  # type: ignore
+
+
+def get_extension(path: str, name: str) -> Dict[str, fnl.e.Entity]:
+    module = importlib.import_module(path)
+    entities = getattr(module, name)
+    if not isinstance(entities, dict):
+        raise TypeError(f"{path}.{name} is not a dictionary, it's: {entities!r}")
+    for k, v in entities.items():
+        if not isinstance(k, str):
+            raise TypeError(f"{path}.{name}'s key {k!r} is not a string")
+        if not isinstance(entities, dict):
+            raise TypeError(f"{path}.{name}[{k!r}] is not a dictionary, it's: {v!r}")
+    return entities
 
 
 def build(config_path: str):
@@ -39,14 +54,20 @@ def build(config_path: str):
         config = json.load(config_file)
 
     if "template_directory" in config:
-    template_directory = Path(config["template_directory"])
+        template_directory = Path(config["template_directory"])
     else:
         template_directory = Path(__file__).parent/"template"
     input_directory = Path(config["input_directory"])
     output_directory = Path(config["output_directory"])
     shutil.copytree(template_directory, output_directory, dirs_exist_ok=True)
 
-    compiled_html = render_toc(input_directory, config["toc"])
+    extensions = reduce(
+        lambda acc, ext: {**acc, **get_extension(ext[0], ext[1])},
+        config.get("extensions", []),
+        {}
+    )
+
+    compiled_html = render_toc(input_directory, config["toc"], extensions)
     js_code = dedent(f"""
     window.fnl = {{
         start: {json.dumps(config["start"])},
@@ -64,6 +85,10 @@ if sys.argv[1:2] == ["serve"] and len(sys.argv) == 3:
         config = json.load(config_file)
 
     build(config_path)
+    if "template_directory" in config:
+        template_directory = Path(config["template_directory"])
+    else:
+        template_directory = Path(__file__).parent/"template"
 
     async def watch(path):
         async for updates in watchgod.awatch(path):
@@ -76,7 +101,7 @@ if sys.argv[1:2] == ["serve"] and len(sys.argv) == 3:
     async def watcher(app: web.Application):
         asyncio.create_task(watch("fnldoc.json"))
         asyncio.create_task(watch(config["input_directory"]))
-        asyncio.create_task(watch(config["template_directory"]))
+        asyncio.create_task(watch(template_directory))
 
     routes = web.RouteTableDef()
 

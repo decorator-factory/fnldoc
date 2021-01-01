@@ -13,5 +13,7 @@
         }
     },
     "output_directory": "output",
-    "extensions": []
+    "extensions": [
+        ["fnldoc.interpolate", "__extension__"]
+    ]
 }
