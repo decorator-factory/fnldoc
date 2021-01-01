@@ -112,7 +112,7 @@ if sys.argv[1:2] == ["serve"] and len(sys.argv) == 3:
     app.on_startup.append(watcher)
 
     web.run_app(app)
-elif sys.argv[1:2] == ["serve"] and len(sys.argv) == 3:
+elif sys.argv[1:2] == ["build"] and len(sys.argv) == 3:
     config_path = sys.argv[2]
     build(config_path)
 else:
