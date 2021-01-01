@@ -134,5 +134,4 @@ dmypy.json
 .idea/
 
 # FNL Docs
-input/
 output/

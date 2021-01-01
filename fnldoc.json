@@ -1,10 +1,15 @@
 {
     "input_directory": "input",
+    "start": "Thing",
     "toc": {
         "Thing": "thing.fnl",
         "Aaa": {
             "stuff": "aaa/stuff.fnl",
-            "x": "aaa/x.fnl"
+            "In auctor tellus": "aaa/x.fnl"
+        },
+        "Bbb": {
+            "stuff": "aaa/stuff.fnl",
+            "In auctor tellus": "aaa/x.fnl"
         }
     },
     "output_directory": "output",

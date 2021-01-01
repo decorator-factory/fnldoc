@@ -43,10 +43,13 @@ def build():
     output_directory = Path(config["output_directory"])
     shutil.copytree(template_directory, output_directory, dirs_exist_ok=True)
 
-    r = render_toc(input_directory, config["toc"])
-    j = json.dumps(r)
+    compiled_html = render_toc(input_directory, config["toc"])
     js_code = dedent(f"""
-    window.fnlDocData = {j};
+    window.fnl = {{
+        start: {json.dumps(config["start"])},
+        source: {json.dumps(config["toc"])},
+        compiledHtml: {json.dumps(compiled_html)},
+    }};
     """)
     (output_directory / Path("data.js")).write_text(js_code)
 
@@ -54,6 +57,8 @@ def build():
 if sys.argv[1:] == ["serve"]:
     with open("fnldoc.json") as config_file:
         config = json.load(config_file)
+
+    build()
 
     async def watch(path):
         async for updates in watchgod.awatch(path):
@@ -64,6 +69,7 @@ if sys.argv[1:] == ["serve"]:
                 print_exc(limit=4)
 
     async def watcher(app: web.Application):
+        asyncio.create_task(watch("fnldoc.json"))
         asyncio.create_task(watch(config["input_directory"]))
         asyncio.create_task(watch(config["template_directory"]))
 

@@ -11,7 +11,7 @@ const createTocLeaf = (name, htmlContent, contentSetter) => {
     link.href = "#";
     link.innerText = name
     link.addEventListener("click", () => {
-        contentSetter(htmlContent);
+        contentSetter(name, htmlContent);
     });
     li.appendChild(link);
     return li;
@@ -27,23 +27,18 @@ const createTocBranch = (name, content, contentSetter) => {
     li.innerText = name + " ";
     li.setAttribute("class", "fnldoc--toc--point fnldoc--toc--node");
 
-    const buttonSpan = document.createElement("button");
-    buttonSpan.innerText = "+";
-    buttonSpan.setAttribute("class", "fnldoc--toc--toggle")
-    buttonSpan.addEventListener("click", () => {
-        if (buttonSpan.innerText === "-") {
-            buttonSpan.innerText = "+";
-            nav.style.visibility = "hidden";
-        } else {
-            buttonSpan.innerText = "-";
-            nav.style.visibility = "visible";
-        }
+    const toggleButton = document.createElement("button");
+    toggleButton.setAttribute("class", "fnldoc--toc--toggle")
+    toggleButton.addEventListener("click", () => {
+        toggleButton.classList.toggle("--open");
+        nav.classList.toggle("--hidden");
     });
-    li.appendChild(buttonSpan);
+    li.appendChild(toggleButton);
 
     const nav = document.createElement("nav");
     nav.appendChild(tocToBulletList(content, contentSetter));
-    nav.style.visibility = "hidden";
+    nav.classList.add("fnldoc--toc--nested");
+    nav.classList.add("--hidden");
 
     li.appendChild(nav);
     return li;
@@ -82,17 +77,27 @@ const waitForCondition = (conditionFn, stepMs=100) =>
 
 
 /**
- * @param {{tocDiv: HTMLDivElement}}
+ * @param {{
+ *      toc: Element,
+ *      main: Element,
+ *      title: Element,
+ * }}
  */
-window.fnlDoc = async ({tocDiv}) => {
-    await waitForCondition(() => window.fnlDocData !== undefined);
+window.loadFnlDoc = async ({toc, main, title}) => {
+    await waitForCondition(() => window.fnl !== undefined);
 
-
-    const contentSetter = html => {
-        console.log({html});
+    /**
+     * @param titleText {string}
+     * @param htmlContent {string}
+     */
+    const contentSetter = (titleText, htmlContent) => {
+        title.innerHTML = titleText;
+        main.innerHTML = htmlContent;
     };
 
-    const data = window.fnlDocData;
-    const element = tocToBulletList(data, contentSetter);
-    tocDiv.appendChild(element);
+    const {compiledHtml} = window.fnl;
+    const element = tocToBulletList(compiledHtml, contentSetter);
+    toc.appendChild(element);
+
+    contentSetter(window.fnl.start, compiledHtml[window.fnl.start]);
 };
