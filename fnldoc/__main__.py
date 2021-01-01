@@ -34,8 +34,8 @@ def render_toc(input_directory: Path, src: Toc) -> Node:
     return foo(input_directory, src)  # type: ignore
 
 
-def build():
-    with open("fnldoc.json") as config_file:
+def build(config_path: str):
+    with open(config_path) as config_file:
         config = json.load(config_file)
 
     template_directory = Path(config["template_directory"])
@@ -54,17 +54,19 @@ def build():
     (output_directory / Path("data.js")).write_text(js_code)
 
 
-if sys.argv[1:] == ["serve"]:
-    with open("fnldoc.json") as config_file:
+if sys.argv[1:2] == ["serve"] and len(sys.argv) == 3:
+    config_path = sys.argv[2]
+
+    with open(config_path) as config_file:
         config = json.load(config_file)
 
-    build()
+    build(config_path)
 
     async def watch(path):
         async for updates in watchgod.awatch(path):
             print("Updates:", updates)
             try:
-                build()
+                build(config_path)
             except BaseException as e:
                 print_exc(limit=4)
 
@@ -82,7 +84,11 @@ if sys.argv[1:] == ["serve"]:
     app.on_startup.append(watcher)
 
     web.run_app(app)
-elif sys.argv[1:] == ["build"]:
-    build()
+elif sys.argv[1:2] == ["serve"] and len(sys.argv) == 3:
+    config_path = sys.argv[2]
+    build(config_path)
 else:
-    raise NotImplementedError
+    print("Unknown invocation mode. Valid modes:")
+    print("python -m fnldoc build <config_file>")
+    print("python -m fnldoc serve <config_file>")
+    sys.exit(1)
