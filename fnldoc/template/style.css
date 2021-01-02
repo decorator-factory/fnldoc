@@ -224,6 +224,10 @@ ul ul {
     #toc {
         justify-self: stretch;
     }
+
+    #content {
+        overflow-y: visible;
+    }
 }
 
 
