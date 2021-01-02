@@ -1,3 +1,5 @@
+(() => { // <IIFE>
+
 /**
  * @param name {string}
  * @param htmlContent {string}
@@ -102,3 +104,5 @@ window.loadFnlDoc = async ({toc, main, title}) => {
 
     contentSetter(window.fnl.start, compiledHtml[window.fnl.start]);
 };
+
+})(); // </IIFE>
