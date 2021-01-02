@@ -81,7 +81,7 @@ main {
         "header title title"
         "left middle .";
     grid-template-columns: 8fr 13fr 5fr;
-    grid-template-rows: 4em auto;
+    grid-template-rows: 3.3em auto;
     width: 100%;
     height: 100%;
     padding: 0;
@@ -103,7 +103,7 @@ main {
     margin-left: 14px;
 
     position: absolute;
-    bottom: 12px;
+    bottom: 6px;
 }
 
 #header {
@@ -121,7 +121,7 @@ main {
     margin-right: 14px;
 
     position: absolute;
-    bottom: 12px;
+    bottom: 6px;
     right: 0;
 }
 
