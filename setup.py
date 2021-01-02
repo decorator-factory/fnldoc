@@ -20,13 +20,13 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        "lark",
         "watchgod",
         "fnl@git+ssh://git@github.com/decorator-factory/python-fnl#egg=fnl",
         "aiohttp",
+        "markdown",
     ],
     python_requires='>=3.8',
     package_data={
-        "": ["*.md", "*.lark", "*.html", "*.css", "*.fnl"]
+        "": ["*.md", "*.lark", "*.html", "*.css", "*.fnl", "*.js"]
     }
 )

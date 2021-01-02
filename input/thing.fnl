@@ -2,10 +2,6 @@
     ((h 1)
         "Lorem ipsum")
 
-    ($$ """
-    Hello, world! @(bf "hello")@
-    """)
-
     (p "Dolor sit amet, consectetur adipiscing elit. Nulla ac accumsan
     nibh. Etiam eget odio ante. Vestibulum ac venenatis nibh. Vivamus maximus
     turpis arcu, eleifend iaculis enim vulputate sit amet. Proin elementum elit
