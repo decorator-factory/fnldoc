@@ -91,6 +91,7 @@ window.loadFnlDoc = async ({toc, main, title}) => {
      * @param htmlContent {string}
      */
     const contentSetter = (titleText, htmlContent) => {
+        window.fnl.onPageSwitch.forEach(fn => fn(titleText));
         title.innerHTML = titleText;
         main.innerHTML = htmlContent;
     };

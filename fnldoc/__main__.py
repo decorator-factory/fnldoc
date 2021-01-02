@@ -98,6 +98,7 @@ def build(config_path: str):
         start: {json.dumps(config["start"])},
         source: {json.dumps(config["toc"])},
         compiledHtml: {json.dumps(compiled_html)},
+        onPageSwitch: [], // (newPageTitle: string) => void
     }};
     """)
     (output_directory / Path("data.js")).write_text(js_code)
