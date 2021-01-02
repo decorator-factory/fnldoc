@@ -80,7 +80,7 @@ main {
     grid-template-areas:
         "header title title"
         "left middle .";
-    grid-template-columns: 8fr 45em 5fr;
+    grid-template-columns: 8fr 13fr 5fr;
     grid-template-rows: 4em auto;
     width: 100%;
     height: 100%;
