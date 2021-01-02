@@ -135,6 +135,10 @@ li.fnldoc--toc--point a {
     transition: 0.1s;
 }
 
+.fnldoc--toc--branch-label, .fnldoc--toc--node button {
+    cursor: pointer;
+}
+
 li.fnldoc--toc--point a:hover {
     color: var(--primary-color-dark) !important;
 }

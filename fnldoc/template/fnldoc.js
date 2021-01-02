@@ -26,15 +26,22 @@ const createTocLeaf = (name, htmlContent, contentSetter) => {
  */
 const createTocBranch = (name, content, contentSetter) => {
     const li = document.createElement("li");
-    li.innerText = name + " ";
     li.setAttribute("class", "fnldoc--toc--point fnldoc--toc--node");
+
+    const span = document.createElement("span");
+    span.setAttribute("class", "fnldoc--toc--branch-label");
+    span.innerText = name + " ";
+
+    const toggleBranch = () => {
+        toggleButton.classList.toggle("--open");
+        nav.classList.toggle("--hidden");
+    };
 
     const toggleButton = document.createElement("button");
     toggleButton.setAttribute("class", "fnldoc--toc--toggle")
-    toggleButton.addEventListener("click", () => {
-        toggleButton.classList.toggle("--open");
-        nav.classList.toggle("--hidden");
-    });
+    span.addEventListener("click", toggleBranch);
+    toggleButton.addEventListener("click", toggleBranch);
+    li.appendChild(span);
     li.appendChild(toggleButton);
 
     const nav = document.createElement("nav");
