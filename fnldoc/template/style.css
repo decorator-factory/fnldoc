@@ -207,6 +207,11 @@ ul ul {
 
 @media screen and (max-width: 1200px) {
 
+    #content {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
     main {
         grid-template-areas:
             "header"
