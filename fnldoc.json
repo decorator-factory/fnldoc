@@ -16,5 +16,13 @@
     "extensions": [
         ["fnldoc.interpolate", "__extension__"],
         ["fnldoc.md", "__extension__"]
+    ],
+
+    "title": "Example Title",
+    "extra_css": [
+        "dummy.css"
+    ],
+    "extra_js": [
+        "dummy.js"
     ]
 }

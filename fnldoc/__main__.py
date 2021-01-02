@@ -11,6 +11,7 @@ import watchgod
 import shutil
 from aiohttp import web
 from functools import reduce
+import string
 
 
 Toc = Dict[str, Union["Toc", str]]
@@ -49,6 +50,15 @@ def get_extension(path: str, name: str) -> Dict[str, fnl.e.Entity]:
     return entities
 
 
+def generate_head_extras(extra_js: List[str], extra_css: List[str]):
+    rv = ""
+    for extra in extra_js:
+        rv += f'<script src="{extra}"></script>\n'
+    for extra in extra_css:
+        rv += f'<link rel="stylesheet" href="{extra}"/>\n'
+    return rv
+
+
 def build(config_path: str):
     with open(config_path) as config_file:
         config = json.load(config_file)
@@ -60,6 +70,21 @@ def build(config_path: str):
     input_directory = Path(config["input_directory"])
     output_directory = Path(config["output_directory"])
     shutil.copytree(template_directory, output_directory, dirs_exist_ok=True)
+
+
+    index_path = template_directory / "index.html"
+    extra_css: List[str] = config.get("extra_css", [])
+    extra_js: List[str] = config.get("extra_js", [])
+    for extra in extra_css + extra_js:
+        shutil.copy(input_directory / extra, output_directory / extra)
+
+    final_index_page = string.Template(index_path.read_text()).substitute({
+        "title": config.get("title", "Documentation"),
+        "head_extras": generate_head_extras(extra_js, extra_css)
+    })
+    (output_directory / "index.html").write_text(final_index_page)
+
+    config.get("title", "")
 
     extensions = reduce(
         lambda acc, ext: {**acc, **get_extension(ext[0], ext[1])},
