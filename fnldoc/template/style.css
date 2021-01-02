@@ -205,15 +205,15 @@ ul ul {
 }
 
 
-
 @media screen and (max-width: 1200px) {
+
     main {
         grid-template-areas:
-            "header header header"
-            "left left left"
-            ". title ."
-            ". middle .";
-        grid-template-columns: 1fr 30em 1fr;
+            "header"
+            "left"
+            "title"
+            "middle";
+        grid-template-columns: 100%;
         grid-template-rows: 4em max-content 4em max-content;
     }
 
@@ -227,20 +227,6 @@ ul ul {
 
     #content {
         overflow-y: visible;
-    }
-}
-
-
-@media screen and (max-width: 610px) {
-
-    main {
-        grid-template-areas:
-            "header"
-            "left"
-            "title"
-            "middle";
-        grid-template-columns: 100%;
-        grid-template-rows: 4em max-content 4em max-content;
     }
 
 }
