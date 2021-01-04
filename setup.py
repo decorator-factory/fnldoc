@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="fnldoc",
-    version="0.0.1",  # don't change version for now, early development
+    version="0.0.2",
     author="decorator-factory",
     author_email="appendix.y.z@gmail.com",
     description="Documentation tool using FNL",

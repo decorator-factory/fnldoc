@@ -20,7 +20,7 @@ Toc = Dict[str, Union["Toc", str]]
 def foo(input_directory: Path, src: Union[str, Toc], extensions: Dict[str, fnl.e.Entity]):
     if isinstance(src, str):
         path = input_directory / Path(src)
-        source = path.read_text()
+        source = path.read_text("utf-8", "space_it")
         html = fnl.html(source, extensions)
         return html
     else:
@@ -60,7 +60,7 @@ def generate_head_extras(extra_js: List[str], extra_css: List[str]):
 
 
 def build(config_path: str):
-    with open(config_path) as config_file:
+    with open(config_path, encoding="utf-8") as config_file:
         config = json.load(config_file)
 
     if "template_directory" in config:
@@ -78,11 +78,11 @@ def build(config_path: str):
     for extra in extra_css + extra_js:
         shutil.copy(input_directory / extra, output_directory / extra)
 
-    final_index_page = string.Template(index_path.read_text()).substitute({
+    final_index_page = string.Template(index_path.read_text("utf-8", "space_it")).substitute({
         "title": config.get("title", "Documentation"),
         "head_extras": generate_head_extras(extra_js, extra_css)
     })
-    (output_directory / "index.html").write_text(final_index_page)
+    (output_directory / "index.html").write_text(final_index_page, "utf-8", "space_it")
 
     config.get("title", "")
 
@@ -101,13 +101,13 @@ def build(config_path: str):
         onPageSwitch: [], // (newPageTitle: string) => void
     }};
     """)
-    (output_directory / Path("data.js")).write_text(js_code)
+    (output_directory / Path("data.js")).write_text(js_code, "utf-8", "space_it")
 
 
 if sys.argv[1:2] == ["serve"] and len(sys.argv) == 3:
     config_path = sys.argv[2]
 
-    with open(config_path) as config_file:
+    with open(config_path, encoding="utf-8") as config_file:
         config = json.load(config_file)
 
     build(config_path)
