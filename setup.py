@@ -21,7 +21,7 @@ setuptools.setup(
     ],
     install_requires=[
         "watchgod",
-        "fnl@git+ssh://git@github.com/decorator-factory/python-fnl#egg=fnl",
+        "fnl@git+https://github.com/decorator-factory/python-fnl#egg=fnl",
         "aiohttp",
         "markdown",
     ],
