@@ -131,6 +131,10 @@ if sys.argv[1:2] == ["serve"] and len(sys.argv) == 3:
 
     routes = web.RouteTableDef()
 
+    @routes.get("/")
+    async def on_root_redirect_to_index(req: web.Request) -> web.StreamResponse:
+        raise web.HTTPFound(location="index.html")
+
     routes.static('/', config["output_directory"])
 
     app = web.Application()
