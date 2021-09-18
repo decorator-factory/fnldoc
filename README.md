@@ -75,7 +75,7 @@ Let's look at the example documentation.
         ["fnldoc.md", "__extension__"]
     ],
 
-    // The title that will be
+    // The title that will be placed in the <title> tag
     "title": "Example Title",
 
     // CSS and JS files to put in the output directory:
